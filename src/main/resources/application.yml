@@ -4,3 +4,60 @@ server:
 spring:
   application:
     name: demo
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    # 数据库驱动类名 (Spring Boot 2.x/3.x 通常可以自动识别，但显式写出更稳妥)
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 数据库连接 URL
+    # 注意：时区设置 (serverTimezone) 和字符集 (useUnicode, characterEncoding) 很重要
+    url: jdbc:mysql://127.0.0.1:3306/mytest?useSSL=false&allowPublicKeyRetrieval=true
+    # 数据库用户名
+    username: root
+    # 数据库密码
+    password:
+    # 3. Druid 特有配置
+    druid:
+      # --- 核心连接池配置 ---
+      initial-size: 5             # 初始化连接数
+      min-idle: 5                 # 最小空闲连接数
+      max-active: 20              # 最大活跃连接数 (对应 Hikari 的 maximum-pool-size)
+      max-wait: 60000             # 获取连接等待超时的时间 (毫秒)
+
+      # --- 检测与回收配置 ---
+      time-between-eviction-runs-millis: 60000  # 检测间隔
+      min-evictable-idle-time-millis: 300000    # 连接最小生存时间
+      validation-query: SELECT 1                # 验证连接有效的 SQL (Oracle 用 SELECT 1 FROM DUAL)
+      test-while-idle: true       # 空闲时检测
+      test-on-borrow: false       # 借出时检测 (性能消耗大，通常设为 false)
+      test-on-return: false       # 归还时检测
+
+      # --- 高级功能配置 (Druid 的强项) ---
+
+      # A. 配置监控统计拦截器 (开启 SQL 监控)
+      filters: stat,wall,slf4j
+      # stat: 监控统计
+      # wall: 防火墙 (防止 SQL 注入)
+      # slf4j: 日志输出
+      # config: 如果使用了加密密码，需要加上 config 过滤器
+
+      # B. 慢 SQL 记录
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=2000
+      # mergeSql: 合并同类 SQL
+      # slowSqlMillis: 超过 2000ms 视为慢 SQL
+
+      # C. Web 监控页面配置 (StatViewServlet)
+      # 注意：在新版 starter 中，这部分配置通常在 spring.datasource.druid.stat-view-servlet 下
+      stat-view-servlet:
+        enabled: true             # 开启监控页面
+        url-pattern: /druid/*     # 访问路径 http://localhost:8080/druid/
+        reset-enable: false       # 禁止重置按钮
+        login-username: admin     # 监控页面登录用户名
+        login-password: admin123  # 监控页面登录密码
+        allow: 127.0.0.1          # 允许访问的 IP (留空或注释则允许所有)
+        deny:                     # 拒绝访问的 IP
+
+      # D. Web 应用防火墙 (WebStatFilter)
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        exclusions: "*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*"
