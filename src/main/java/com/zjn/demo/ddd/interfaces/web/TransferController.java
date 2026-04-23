@@ -1,6 +1,7 @@
 package com.zjn.demo.ddd.interfaces.web;
 
 import com.zjn.demo.ddd.application.TransferService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -10,12 +11,9 @@ import java.math.BigDecimal;
 
 @RestController
 @RequestMapping("/api/transfers")
+@RequiredArgsConstructor
 public class TransferController {
     private final TransferService transferService;
-
-    public TransferController(TransferService transferService) {
-        this.transferService = transferService;
-    }
 
     @PostMapping("/doTransfer")
     public void doTransfer(@RequestParam Long from,

@@ -3,7 +3,9 @@ package com.zjn.demo.ddd.domain.model;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Getter;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -15,9 +17,11 @@ import java.math.BigDecimal;
  * @author zhangjinning
  * @since 2026-02-25
  */
+@Getter
 @TableName("t_account")
 public class Account implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
@@ -45,14 +49,6 @@ public class Account implements Serializable {
             throw new IllegalArgumentException("金额必须大于0");
         }
         this.balance = this.balance.add(amount);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public BigDecimal getBalance() {
-        return balance;
     }
 
     @Override

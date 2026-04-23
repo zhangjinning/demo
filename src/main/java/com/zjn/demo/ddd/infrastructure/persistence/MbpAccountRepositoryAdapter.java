@@ -4,16 +4,16 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.zjn.demo.ddd.domain.model.Account;
 import com.zjn.demo.ddd.domain.repository.AccountRepository;
 import com.zjn.demo.mapper.AccountMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
+@RequiredArgsConstructor
 public class MbpAccountRepositoryAdapter implements AccountRepository {
 
-    @Autowired
-    private AccountMapper accountMapper;
+    private final AccountMapper accountMapper;
 
     @Override
     public Optional<Account> findById(Long accountId) {

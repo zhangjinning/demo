@@ -3,22 +3,17 @@ package com.zjn.demo.ddd.application;
 import com.zjn.demo.ddd.domain.repository.AccountRepository;
 import com.zjn.demo.ddd.domain.service.NotificationService;
 import com.zjn.demo.ddd.domain.model.Account;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
 @Service
+@RequiredArgsConstructor
 public class TransferService {
 
     private final AccountRepository accountRepository;
     private final NotificationService notificationService;
-
-    // 通过构造函数注入接口（依赖倒置）
-    public TransferService(AccountRepository accountRepository,
-                           NotificationService notificationService) {
-        this.accountRepository = accountRepository;
-        this.notificationService = notificationService;
-    }
 
     public void transfer(Long fromId, Long toId, BigDecimal amount) {
         // 1. 获取账户（依赖仓储接口）
